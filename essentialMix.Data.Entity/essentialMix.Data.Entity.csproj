@@ -50,7 +50,7 @@
 		<PackageId>$(ProjectName)</PackageId>
 		<PackageIcon>buckramega.png</PackageIcon>
 		<PackageOutputPath>$(SolutionDir)nuget</PackageOutputPath>
-		<AssemblyVersion>13.0.2.0</AssemblyVersion>
+		<AssemblyVersion>13.0.3.0</AssemblyVersion>
 		<FileVersion>22.2.19.0</FileVersion>
 		<Version Condition=" '$(AssemblyVersion)' == '' ">0.0.1</Version>
 		<Version Condition=" '$(AssemblyVersion)' != '' ">$(AssemblyVersion)</Version>
@@ -64,7 +64,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<Version>13.0.2.0</Version>
+		<Version>13.0.3.0</Version>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -79,14 +79,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
-		<PackageReference Include="essentialMix" Version="13.0.2" />
-		<PackageReference Include="essentialMix.Data" Version="13.0.2" />
-		<PackageReference Include="essentialMix.Threading" Version="13.0.2" />
+		<PackageReference Include="essentialMix" Version="13.0.3" />
+		<PackageReference Include="essentialMix.Data" Version="13.0.3" />
+		<PackageReference Include="essentialMix.Threading" Version="13.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
 		<PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.15" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.16" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
 
