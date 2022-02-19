@@ -49,8 +49,8 @@
 		<PackageId>$(ProjectName)</PackageId>
 		<PackageIcon>buckramega.png</PackageIcon>
 		<PackageOutputPath>$(SolutionDir)nuget</PackageOutputPath>
-		<AssemblyVersion>13.0.1.0</AssemblyVersion>
-		<FileVersion>22.2.4.0</FileVersion>
+		<AssemblyVersion>13.0.2.0</AssemblyVersion>
+		<FileVersion>22.2.19.0</FileVersion>
 		<Version Condition=" '$(AssemblyVersion)' == '' ">0.0.1</Version>
 		<Version Condition=" '$(AssemblyVersion)' != '' ">$(AssemblyVersion)</Version>
 		<PackageVersion>$(Version)</PackageVersion>
@@ -80,9 +80,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="essentialMix" Version="13.0.1" />
-		<PackageReference Include="essentialMix.Newtonsoft" Version="13.0.1" />
-		<PackageReference Include="essentialMix.Threading" Version="13.0.1" />
+		<PackageReference Include="essentialMix" Version="13.0.2" />
+		<PackageReference Include="essentialMix.Newtonsoft" Version="13.0.2" />
+		<PackageReference Include="essentialMix.Threading" Version="13.0.2" />
 		<PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
 		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
 		<PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
@@ -106,6 +106,7 @@
 		<PreBuildEvent>if exist "$(TargetPath).locked" del "$(TargetPath).locked"
 if exist "$(TargetPath)" if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).locked"
 		</PreBuildEvent>
+		<Version>13.0.2.0</Version>
 	</PropertyGroup>
 
 </Project>
