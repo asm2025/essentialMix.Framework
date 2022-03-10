@@ -111,8 +111,8 @@ public class RtfConsole : RichTextBox
 		if (SelectionStart < _inputStart)
 		{
 			// Allow arrows and Ctrl-C.
-			if (!e.KeyCode.IsFunction() 
-				&& !e.KeyCode.IsNavigation() 
+			if (!e.KeyCode.IsFunction()
+				&& !e.KeyCode.IsNavigation()
 				&& !(e.KeyCode == Keys.C && e.Control))
 			{
 				e.SuppressKeyPress = true;
@@ -279,7 +279,7 @@ public class RtfConsole : RichTextBox
 		});
 		return true;
 	}
-		
+
 	public void Write(char value) { _writer.Write(value); }
 
 	public void Write(char value, Color color)
@@ -332,6 +332,9 @@ public class RtfConsole : RichTextBox
 
 	public void UpdateMode()
 	{
+		IntPtr hConsole = ConsoleHelper.GetConsoleWindow();
+		if (hConsole.IsInvalidHandle()) return;
+
 		ConsoleModesEnum add = ConsoleModesEnum.NONE;
 		ConsoleModesEnum remove = ConsoleModesEnum.NONE;
 
@@ -356,7 +359,7 @@ public class RtfConsole : RichTextBox
 		if (QuickEdit) add |= ConsoleModesEnum.ENABLE_QUICK_EDIT_MODE;
 		else remove |= ConsoleModesEnum.ENABLE_QUICK_EDIT_MODE;
 
-		ConsoleHelper.SetMode(remove, add);
+		ConsoleHelper.SetMode(hConsole, remove, add);
 	}
 
 	protected virtual void OnOutput(string e)
