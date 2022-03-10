@@ -10,9 +10,9 @@
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\sign.pfx</AssemblyOriginatorKeyFile>
 		<Platforms>AnyCPU;x64;x86</Platforms>
-		<AssemblyVersion>13.0.2.0</AssemblyVersion>
-		<FileVersion>22.2.19.0</FileVersion>
-		<Version>$(AssemblyVersion)</Version>
+		<AssemblyVersion>13.0.4.0</AssemblyVersion>
+		<FileVersion>22.3.10.0</FileVersion>
+		<Version>13.0.4.0</Version>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
@@ -75,10 +75,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="essentialMix" Version="13.0.3" />
-		<PackageReference Include="essentialMix.Collections" Version="13.0.3" />
-		<PackageReference Include="essentialMix.Drawing" Version="13.0.3" />
-		<PackageReference Include="essentialMix.Threading" Version="13.0.3" />
+		<PackageReference Include="essentialMix" Version="13.0.4" />
+		<PackageReference Include="essentialMix.Collections" Version="13.0.4" />
+		<PackageReference Include="essentialMix.Drawing" Version="13.0.4" />
+		<PackageReference Include="essentialMix.Threading" Version="13.0.4" />
 		<PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
 	</ItemGroup>
 
