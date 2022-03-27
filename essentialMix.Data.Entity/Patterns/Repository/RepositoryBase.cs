@@ -73,21 +73,50 @@ public abstract class RepositoryBase<TContext, TEntity, TKey> : RepositoryBase<T
 		base.Dispose(disposing);
 	}
 
+	/// <inheritdoc />
+	protected override int CountInternal(IPagination settings = null) { return PrepareCountQuery(settings).Count(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<int> CountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<int>(queryable.CountAsync(token));
+	}
+
+	/// <inheritdoc />
+	protected override long LongCountInternal(IPagination settings = null) { return PrepareCountQuery(settings).LongCount(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<long> LongCountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<long>(queryable.LongCountAsync(token));
+	}
+
+	/// <inheritdoc />
 	[NotNull]
 	protected override IQueryable<TEntity> ListInternal(IPagination settings = null) { return PrepareListQuery(settings); }
 
+	/// <inheritdoc />
 	protected override ValueTask<IList<TEntity>> ListAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
 	{
+		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		settings ??= new Pagination();
 		return new ValueTask<IList<TEntity>>(PrepareListQuery(settings).Paginate(settings).ToListAsync(token).As<List<TEntity>, IList<TEntity>>(token));
 	}
 
+	/// <inheritdoc />
 	protected override TEntity GetInternal(TKey key) { return PrepareGetQuery(key).FirstOrDefault(); }
 
 	/// <inheritdoc />
 	protected override ValueTask<TEntity> GetAsyncInternal(TKey key, CancellationToken token = default(CancellationToken))
 	{
+		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		return new ValueTask<TEntity>(PrepareGetQuery(key).FirstOrDefaultAsync(token));
 	}
@@ -117,11 +146,27 @@ public abstract class RepositoryBase<TContext, TEntity, TKey> : RepositoryBase<T
 	}
 
 	[NotNull]
-	protected IQueryable<TEntity> PrepareListQuery(IPagination settings)
+	protected IQueryable<TEntity> PrepareCountQuery(IPagination settings) { return PrepareCountQuery(DbSet, settings); }
+	/// <inheritdoc />
+	protected override IQueryable<TEntity> PrepareCountQuery(IQueryable<TEntity> query, IPagination settings)
 	{
-		return PrepareListQuery(DbSet, settings);
+		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
+		{
+			query = includeSettings.Include.SkipNullOrEmpty()
+									.Aggregate(query, (current, path) => current.Include(path));
+		}
+
+		if (settings is IFilterSettings filterSettings && !string.IsNullOrWhiteSpace(filterSettings.FilterExpression))
+		{
+			query = query.Where(filterSettings.FilterExpression);
+		}
+
+		return query;
 	}
 
+	[NotNull]
+	protected IQueryable<TEntity> PrepareListQuery(IPagination settings) { return PrepareListQuery(DbSet, settings); }
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareListQuery(IQueryable<TEntity> query, IPagination settings)
 	{
 		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
@@ -154,6 +199,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey> : RepositoryBase<T
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey key)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -170,6 +216,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey> : RepositoryBase<T
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey key, IGetSettings settings)
 	{
 		IQueryable<TEntity> query = PrepareGetQuery(key);
@@ -243,9 +290,35 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2> : essentia
 		base.Dispose(disposing);
 	}
 
+	/// <inheritdoc />
+	protected override int CountInternal(IPagination settings = null) { return PrepareCountQuery(settings).Count(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<int> CountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<int>(queryable.CountAsync(token));
+	}
+
+	/// <inheritdoc />
+	protected override long LongCountInternal(IPagination settings = null) { return PrepareCountQuery(settings).LongCount(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<long> LongCountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<long>(queryable.LongCountAsync(token));
+	}
+
+	/// <inheritdoc />
 	[NotNull]
 	protected override IQueryable<TEntity> ListInternal(IPagination settings = null) { return PrepareListQuery(settings); }
 
+	/// <inheritdoc />
 	protected override ValueTask<IList<TEntity>> ListAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
@@ -253,6 +326,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2> : essentia
 		return new ValueTask<IList<TEntity>>(PrepareListQuery(settings).Paginate(settings).ToListAsync(token).As<List<TEntity>, IList<TEntity>>(token));
 	}
 
+	/// <inheritdoc />
 	protected override TEntity GetInternal(TKey1 key1, TKey2 key2) { return PrepareGetQuery(key1, key2).FirstOrDefault(); }
 
 	/// <inheritdoc />
@@ -287,11 +361,27 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2> : essentia
 	}
 
 	[NotNull]
-	protected IQueryable<TEntity> PrepareListQuery(IPagination settings)
+	protected IQueryable<TEntity> PrepareCountQuery(IPagination settings) { return PrepareCountQuery(DbSet, settings); }
+	/// <inheritdoc />
+	protected override IQueryable<TEntity> PrepareCountQuery(IQueryable<TEntity> query, IPagination settings)
 	{
-		return PrepareListQuery(DbSet, settings);
+		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
+		{
+			query = includeSettings.Include.SkipNullOrEmpty()
+									.Aggregate(query, (current, path) => current.Include(path));
+		}
+
+		if (settings is IFilterSettings filterSettings && !string.IsNullOrWhiteSpace(filterSettings.FilterExpression))
+		{
+			query = query.Where(filterSettings.FilterExpression);
+		}
+
+		return query;
 	}
 
+	[NotNull]
+	protected IQueryable<TEntity> PrepareListQuery(IPagination settings) { return PrepareListQuery(DbSet, settings); }
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareListQuery(IQueryable<TEntity> query, IPagination settings)
 	{
 		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
@@ -424,9 +514,35 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3> : e
 		base.Dispose(disposing);
 	}
 
+	/// <inheritdoc />
+	protected override int CountInternal(IPagination settings = null) { return PrepareCountQuery(settings).Count(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<int> CountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<int>(queryable.CountAsync(token));
+	}
+
+	/// <inheritdoc />
+	protected override long LongCountInternal(IPagination settings = null) { return PrepareCountQuery(settings).LongCount(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<long> LongCountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<long>(queryable.LongCountAsync(token));
+	}
+
+	/// <inheritdoc />
 	[NotNull]
 	protected override IQueryable<TEntity> ListInternal(IPagination settings = null) { return PrepareListQuery(settings); }
 
+	/// <inheritdoc />
 	protected override ValueTask<IList<TEntity>> ListAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
@@ -434,6 +550,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3> : e
 		return new ValueTask<IList<TEntity>>(PrepareListQuery(settings).Paginate(settings).ToListAsync(token).As<List<TEntity>, IList<TEntity>>(token));
 	}
 
+	/// <inheritdoc />
 	protected override TEntity GetInternal(TKey1 key1, TKey2 key2, TKey3 key3) { return PrepareGetQuery(key1, key2, key3).FirstOrDefault(); }
 
 	/// <inheritdoc />
@@ -468,11 +585,27 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3> : e
 	}
 
 	[NotNull]
-	protected IQueryable<TEntity> PrepareListQuery(IPagination settings)
+	protected IQueryable<TEntity> PrepareCountQuery(IPagination settings) { return PrepareCountQuery(DbSet, settings); }
+	/// <inheritdoc />
+	protected override IQueryable<TEntity> PrepareCountQuery(IQueryable<TEntity> query, IPagination settings)
 	{
-		return PrepareListQuery(DbSet, settings);
+		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
+		{
+			query = includeSettings.Include.SkipNullOrEmpty()
+									.Aggregate(query, (current, path) => current.Include(path));
+		}
+
+		if (settings is IFilterSettings filterSettings && !string.IsNullOrWhiteSpace(filterSettings.FilterExpression))
+		{
+			query = query.Where(filterSettings.FilterExpression);
+		}
+
+		return query;
 	}
 
+	[NotNull]
+	protected IQueryable<TEntity> PrepareListQuery(IPagination settings) { return PrepareListQuery(DbSet, settings); }
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareListQuery(IQueryable<TEntity> query, IPagination settings)
 	{
 		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
@@ -505,6 +638,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3> : e
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -535,6 +669,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3> : e
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, IGetSettings settings)
 	{
 		IQueryable<TEntity> query = PrepareGetQuery(key1, key2, key3);
@@ -616,9 +751,35 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		base.Dispose(disposing);
 	}
 
+	/// <inheritdoc />
+	protected override int CountInternal(IPagination settings = null) { return PrepareCountQuery(settings).Count(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<int> CountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<int>(queryable.CountAsync(token));
+	}
+
+	/// <inheritdoc />
+	protected override long LongCountInternal(IPagination settings = null) { return PrepareCountQuery(settings).LongCount(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<long> LongCountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<long>(queryable.LongCountAsync(token));
+	}
+
+	/// <inheritdoc />
 	[NotNull]
 	protected override IQueryable<TEntity> ListInternal(IPagination settings = null) { return PrepareListQuery(settings); }
 
+	/// <inheritdoc />
 	protected override ValueTask<IList<TEntity>> ListAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
@@ -626,6 +787,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		return new ValueTask<IList<TEntity>>(PrepareListQuery(settings).Paginate(settings).ToListAsync(token).As<List<TEntity>, IList<TEntity>>(token));
 	}
 
+	/// <inheritdoc />
 	protected override TEntity GetInternal(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4) { return PrepareGetQuery(key1, key2, key3, key4).FirstOrDefault(); }
 
 	/// <inheritdoc />
@@ -660,11 +822,27 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 	}
 
 	[NotNull]
-	protected IQueryable<TEntity> PrepareListQuery(IPagination settings)
+	protected IQueryable<TEntity> PrepareCountQuery(IPagination settings) { return PrepareCountQuery(DbSet, settings); }
+	/// <inheritdoc />
+	protected override IQueryable<TEntity> PrepareCountQuery(IQueryable<TEntity> query, IPagination settings)
 	{
-		return PrepareListQuery(DbSet, settings);
+		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
+		{
+			query = includeSettings.Include.SkipNullOrEmpty()
+									.Aggregate(query, (current, path) => current.Include(path));
+		}
+
+		if (settings is IFilterSettings filterSettings && !string.IsNullOrWhiteSpace(filterSettings.FilterExpression))
+		{
+			query = query.Where(filterSettings.FilterExpression);
+		}
+
+		return query;
 	}
 
+	[NotNull]
+	protected IQueryable<TEntity> PrepareListQuery(IPagination settings) { return PrepareListQuery(DbSet, settings); }
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareListQuery(IQueryable<TEntity> query, IPagination settings)
 	{
 		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
@@ -697,6 +875,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -734,6 +913,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, IGetSettings settings)
 	{
 		IQueryable<TEntity> query = PrepareGetQuery(key1, key2, key3, key4);
@@ -819,9 +999,35 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		base.Dispose(disposing);
 	}
 
+	/// <inheritdoc />
+	protected override int CountInternal(IPagination settings = null) { return PrepareCountQuery(settings).Count(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<int> CountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<int>(queryable.CountAsync(token));
+	}
+
+	/// <inheritdoc />
+	protected override long LongCountInternal(IPagination settings = null) { return PrepareCountQuery(settings).LongCount(); }
+
+	/// <inheritdoc />
+	protected override ValueTask<long> LongCountAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
+	{
+		token.ThrowIfCancellationRequested();
+		settings ??= new Pagination();
+		IQueryable<TEntity> queryable = PrepareCountQuery(settings);
+		return new ValueTask<long>(queryable.LongCountAsync(token));
+	}
+
+	/// <inheritdoc />
 	[NotNull]
 	protected override IQueryable<TEntity> ListInternal(IPagination settings = null) { return PrepareListQuery(settings); }
 
+	/// <inheritdoc />
 	protected override ValueTask<IList<TEntity>> ListAsyncInternal(IPagination settings = null, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
@@ -829,6 +1035,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		return new ValueTask<IList<TEntity>>(PrepareListQuery(settings).Paginate(settings).ToListAsync(token).As<List<TEntity>, IList<TEntity>>(token));
 	}
 
+	/// <inheritdoc />
 	protected override TEntity GetInternal(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5) { return PrepareGetQuery(key1, key2, key3, key4, key5).FirstOrDefault(); }
 
 	/// <inheritdoc />
@@ -863,11 +1070,27 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 	}
 
 	[NotNull]
-	protected IQueryable<TEntity> PrepareListQuery(IPagination settings)
+	protected IQueryable<TEntity> PrepareCountQuery(IPagination settings) { return PrepareCountQuery(DbSet, settings); }
+	/// <inheritdoc />
+	protected override IQueryable<TEntity> PrepareCountQuery(IQueryable<TEntity> query, IPagination settings)
 	{
-		return PrepareListQuery(DbSet, settings);
+		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
+		{
+			query = includeSettings.Include.SkipNullOrEmpty()
+									.Aggregate(query, (current, path) => current.Include(path));
+		}
+
+		if (settings is IFilterSettings filterSettings && !string.IsNullOrWhiteSpace(filterSettings.FilterExpression))
+		{
+			query = query.Where(filterSettings.FilterExpression);
+		}
+
+		return query;
 	}
 
+	[NotNull]
+	protected IQueryable<TEntity> PrepareListQuery(IPagination settings) { return PrepareListQuery(DbSet, settings); }
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareListQuery(IQueryable<TEntity> query, IPagination settings)
 	{
 		if (settings is IIncludeSettings { Include.Count: > 0 } includeSettings)
@@ -900,6 +1123,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -944,6 +1168,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 		return query;
 	}
 
+	/// <inheritdoc />
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5, IGetSettings settings)
 	{
 		IQueryable<TEntity> query = PrepareGetQuery(key1, key2, key3, key4, key5);
