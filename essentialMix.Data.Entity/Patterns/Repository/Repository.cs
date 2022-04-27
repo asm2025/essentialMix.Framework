@@ -34,7 +34,7 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Add(TEntity entity)
+	public TEntity Add([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return AddInternal(entity);
@@ -44,7 +44,7 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 	protected virtual TEntity AddInternal([NotNull] TEntity entity) { return DbSet.Add(entity); }
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> AddAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -84,7 +84,7 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Update(TEntity entity)
+	public TEntity Update([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return UpdateInternal(entity);
@@ -99,7 +99,7 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 	}
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -113,7 +113,7 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 	}
 
 	/// <inheritdoc />
-	public void Delete(TKey key)
+	public void Delete([NotNull] TKey key)
 	{
 		ThrowIfDisposed();
 		DeleteInternal(key);
@@ -126,25 +126,25 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 	}
 
 	/// <inheritdoc />
-	public ValueTask DeleteAsync(TKey key, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TKey key, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		return DeleteAsyncInternal(key, token);
 	}
 
-	protected virtual async ValueTask DeleteAsyncInternal([NotNull] TKey key, CancellationToken token = default(CancellationToken))
+	protected virtual async ValueTask<TEntity> DeleteAsyncInternal([NotNull] TKey key, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
 		TEntity entity = await DbSet.FindAsync(token, key);
-		if (entity == null) throw new KeyNotFoundException();
+		if (entity == null) return null;
 		token.ThrowIfCancellationRequested();
-		await DeleteAsyncInternal(entity, token);
+		return await DeleteAsyncInternal(entity, token);
 	}
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Delete(TEntity entity)
+	public TEntity Delete([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return DeleteInternal(entity);
@@ -157,7 +157,7 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 		return DbSet.Remove(entity);
 	}
 
-	public ValueTask<TEntity> DeleteAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -195,7 +195,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Add(TEntity entity)
+	public TEntity Add([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return AddInternal(entity);
@@ -205,7 +205,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 	protected virtual TEntity AddInternal([NotNull] TEntity entity) { return DbSet.Add(entity); }
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> AddAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -245,7 +245,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Update(TEntity entity)
+	public TEntity Update([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return UpdateInternal(entity);
@@ -260,7 +260,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 	}
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -274,7 +274,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 	}
 
 	/// <inheritdoc />
-	public void Delete(TKey1 key1, TKey2 key2)
+	public void Delete([NotNull] TKey1 key1, TKey2 key2)
 	{
 		ThrowIfDisposed();
 		DeleteInternal(key1, key2);
@@ -287,25 +287,25 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 	}
 
 	/// <inheritdoc />
-	public ValueTask DeleteAsync(TKey1 key1, TKey2 key2, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TKey1 key1, TKey2 key2, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		return DeleteAsyncInternal(key1, key2, token);
 	}
 
-	protected virtual async ValueTask DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, CancellationToken token = default(CancellationToken))
+	protected virtual async ValueTask<TEntity> DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
 		TEntity entity = await DbSet.FindAsync(token, key1, key2);
-		if (entity == null) throw new KeyNotFoundException();
+		if (entity == null) return null;
 		token.ThrowIfCancellationRequested();
-		await DeleteAsyncInternal(entity, token);
+		return await DeleteAsyncInternal(entity, token);
 	}
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Delete(TEntity entity)
+	public TEntity Delete([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return DeleteInternal(entity);
@@ -318,7 +318,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 		return DbSet.Remove(entity);
 	}
 
-	public ValueTask<TEntity> DeleteAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -356,7 +356,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Add(TEntity entity)
+	public TEntity Add([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return AddInternal(entity);
@@ -366,7 +366,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 	protected virtual TEntity AddInternal([NotNull] TEntity entity) { return DbSet.Add(entity); }
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> AddAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -406,7 +406,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Update(TEntity entity)
+	public TEntity Update([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return UpdateInternal(entity);
@@ -421,7 +421,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 	}
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -435,7 +435,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 	}
 
 	/// <inheritdoc />
-	public void Delete(TKey1 key1, TKey2 key2, TKey3 key3)
+	public void Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3)
 	{
 		ThrowIfDisposed();
 		DeleteInternal(key1, key2, key3);
@@ -448,25 +448,25 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 	}
 
 	/// <inheritdoc />
-	public ValueTask DeleteAsync(TKey1 key1, TKey2 key2, TKey3 key3, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		return DeleteAsyncInternal(key1, key2, key3, token);
 	}
 
-	protected virtual async ValueTask DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, CancellationToken token = default(CancellationToken))
+	protected virtual async ValueTask<TEntity> DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
 		TEntity entity = await DbSet.FindAsync(token, key1, key2, key3);
-		if (entity == null) throw new KeyNotFoundException();
+		if (entity == null) return null;
 		token.ThrowIfCancellationRequested();
-		await DeleteAsyncInternal(entity, token);
+		return await DeleteAsyncInternal(entity, token);
 	}
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Delete(TEntity entity)
+	public TEntity Delete([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return DeleteInternal(entity);
@@ -479,7 +479,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 		return DbSet.Remove(entity);
 	}
 
-	public ValueTask<TEntity> DeleteAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -517,7 +517,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Add(TEntity entity)
+	public TEntity Add([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return AddInternal(entity);
@@ -527,7 +527,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 	protected virtual TEntity AddInternal([NotNull] TEntity entity) { return DbSet.Add(entity); }
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> AddAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -567,7 +567,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Update(TEntity entity)
+	public TEntity Update([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return UpdateInternal(entity);
@@ -582,7 +582,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 	}
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -596,7 +596,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 	}
 
 	/// <inheritdoc />
-	public void Delete(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
+	public void Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
 	{
 		ThrowIfDisposed();
 		DeleteInternal(key1, key2, key3, key4);
@@ -609,25 +609,25 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 	}
 
 	/// <inheritdoc />
-	public ValueTask DeleteAsync(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		return DeleteAsyncInternal(key1, key2, key3, key4, token);
 	}
 
-	protected virtual async ValueTask DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, CancellationToken token = default(CancellationToken))
+	protected virtual async ValueTask<TEntity> DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
 		TEntity entity = await DbSet.FindAsync(token, key1, key2, key3, key4);
-		if (entity == null) throw new KeyNotFoundException();
+		if (entity == null) return null;
 		token.ThrowIfCancellationRequested();
-		await DeleteAsyncInternal(entity, token);
+		return await DeleteAsyncInternal(entity, token);
 	}
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Delete(TEntity entity)
+	public TEntity Delete([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return DeleteInternal(entity);
@@ -640,7 +640,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 		return DbSet.Remove(entity);
 	}
 
-	public ValueTask<TEntity> DeleteAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -678,7 +678,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Add(TEntity entity)
+	public TEntity Add([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return AddInternal(entity);
@@ -688,7 +688,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 	protected virtual TEntity AddInternal([NotNull] TEntity entity) { return DbSet.Add(entity); }
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> AddAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -728,7 +728,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Update(TEntity entity)
+	public TEntity Update([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return UpdateInternal(entity);
@@ -743,7 +743,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 	}
 
 	/// <inheritdoc />
-	public ValueTask<TEntity> UpdateAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> UpdateAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
@@ -757,7 +757,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 	}
 
 	/// <inheritdoc />
-	public void Delete(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
+	public void Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
 	{
 		ThrowIfDisposed();
 		DeleteInternal(key1, key2, key3, key4, key5);
@@ -770,25 +770,25 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 	}
 
 	/// <inheritdoc />
-	public ValueTask DeleteAsync(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
 		return DeleteAsyncInternal(key1, key2, key3, key4, key5, token);
 	}
 
-	protected virtual async ValueTask DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5, CancellationToken token = default(CancellationToken))
+	protected virtual async ValueTask<TEntity> DeleteAsyncInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5, CancellationToken token = default(CancellationToken))
 	{
 		token.ThrowIfCancellationRequested();
 		TEntity entity = await DbSet.FindAsync(token, key1, key2, key3, key4, key5);
-		if (entity == null) throw new KeyNotFoundException();
+		if (entity == null) return null;
 		token.ThrowIfCancellationRequested();
-		await DeleteAsyncInternal(entity, token);
+		return await DeleteAsyncInternal(entity, token);
 	}
 
 	/// <inheritdoc />
 	[NotNull]
-	public TEntity Delete(TEntity entity)
+	public TEntity Delete([NotNull] TEntity entity)
 	{
 		ThrowIfDisposed();
 		return DeleteInternal(entity);
@@ -801,7 +801,7 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 		return DbSet.Remove(entity);
 	}
 
-	public ValueTask<TEntity> DeleteAsync(TEntity entity, CancellationToken token = default(CancellationToken))
+	public ValueTask<TEntity> DeleteAsync([NotNull] TEntity entity, CancellationToken token = default(CancellationToken))
 	{
 		ThrowIfDisposed();
 		token.ThrowIfCancellationRequested();
