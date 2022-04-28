@@ -17,7 +17,7 @@ public abstract class DataProvider
 		IDataProvider<OleDbType>
 {
 	/// <inheritdoc />
-	protected DataProvider() 
+	protected DataProvider()
 	{
 	}
 
@@ -125,7 +125,7 @@ public abstract class DataProvider
 			new KeyValuePair<OleDbType, Type>(OleDbType.Empty, null)
 		}.AsReadOnly();
 
-	protected override IReadOnlySet<OleDbType> TextualTDbType { get; } = new HashSet<OleDbType>
+	protected override ISet<OleDbType> TextualTDbType { get; } = new HashSet<OleDbType>
 	{
 		OleDbType.BSTR,
 		OleDbType.VarChar,
@@ -138,5 +138,5 @@ public abstract class DataProvider
 		OleDbType.DBTimeStamp,
 		OleDbType.DBDate,
 		OleDbType.DBTime
-	}.AsReadOnly();
+	};
 }
