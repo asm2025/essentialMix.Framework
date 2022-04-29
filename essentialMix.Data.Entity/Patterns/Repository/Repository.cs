@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 using essentialMix.Data.Model;
@@ -113,16 +112,18 @@ public abstract class Repository<TContext, TEntity, TKey> : RepositoryBase<TCont
 	}
 
 	/// <inheritdoc />
-	public void Delete([NotNull] TKey key)
+	public TEntity Delete([NotNull] TKey key)
 	{
 		ThrowIfDisposed();
-		DeleteInternal(key);
+		return DeleteInternal(key);
 	}
 
-	protected virtual void DeleteInternal([NotNull] TKey key)
+	protected virtual TEntity DeleteInternal([NotNull] TKey key)
 	{
-		TEntity entity = DbSet.Find(key) ?? throw new KeyNotFoundException();
-		DeleteInternal(entity);
+		TEntity entity = DbSet.Find(key);
+		return entity == null
+					? null
+					: DeleteInternal(entity);
 	}
 
 	/// <inheritdoc />
@@ -274,16 +275,18 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2> : RepositoryBa
 	}
 
 	/// <inheritdoc />
-	public void Delete([NotNull] TKey1 key1, TKey2 key2)
+	public TEntity Delete([NotNull] TKey1 key1, TKey2 key2)
 	{
 		ThrowIfDisposed();
-		DeleteInternal(key1, key2);
+		return DeleteInternal(key1, key2);
 	}
 
-	protected virtual void DeleteInternal([NotNull] TKey1 key1, TKey2 key2)
+	protected virtual TEntity DeleteInternal([NotNull] TKey1 key1, TKey2 key2)
 	{
-		TEntity entity = DbSet.Find(key1, key2) ?? throw new KeyNotFoundException();
-		DeleteInternal(entity);
+		TEntity entity = DbSet.Find(key1, key2);
+		return entity == null
+					? null
+					: DeleteInternal(entity);
 	}
 
 	/// <inheritdoc />
@@ -435,16 +438,18 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3> : Repos
 	}
 
 	/// <inheritdoc />
-	public void Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3)
+	public TEntity Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3)
 	{
 		ThrowIfDisposed();
-		DeleteInternal(key1, key2, key3);
+		return DeleteInternal(key1, key2, key3);
 	}
 
-	protected virtual void DeleteInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3)
+	protected virtual TEntity DeleteInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3)
 	{
-		TEntity entity = DbSet.Find(key1, key2, key3) ?? throw new KeyNotFoundException();
-		DeleteInternal(entity);
+		TEntity entity = DbSet.Find(key1, key2, key3);
+		return entity == null
+					? null
+					: DeleteInternal(entity);
 	}
 
 	/// <inheritdoc />
@@ -596,16 +601,18 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4> 
 	}
 
 	/// <inheritdoc />
-	public void Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
+	public TEntity Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
 	{
 		ThrowIfDisposed();
-		DeleteInternal(key1, key2, key3, key4);
+		return DeleteInternal(key1, key2, key3, key4);
 	}
 
-	protected virtual void DeleteInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
+	protected virtual TEntity DeleteInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
 	{
-		TEntity entity = DbSet.Find(key1, key2, key3, key4) ?? throw new KeyNotFoundException();
-		DeleteInternal(entity);
+		TEntity entity = DbSet.Find(key1, key2, key3, key4);
+		return entity == null
+					? null
+					: DeleteInternal(entity);
 	}
 
 	/// <inheritdoc />
@@ -757,16 +764,18 @@ public abstract class Repository<TContext, TEntity, TKey1, TKey2, TKey3, TKey4, 
 	}
 
 	/// <inheritdoc />
-	public void Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
+	public TEntity Delete([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
 	{
 		ThrowIfDisposed();
-		DeleteInternal(key1, key2, key3, key4, key5);
+		return DeleteInternal(key1, key2, key3, key4, key5);
 	}
 
-	protected virtual void DeleteInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
+	protected virtual TEntity DeleteInternal([NotNull] TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
 	{
-		TEntity entity = DbSet.Find(key1, key2, key3, key4, key5) ?? throw new KeyNotFoundException();
-		DeleteInternal(entity);
+		TEntity entity = DbSet.Find(key1, key2, key3, key4, key5);
+		return entity == null
+					? null
+					: DeleteInternal(entity);
 	}
 
 	/// <inheritdoc />
