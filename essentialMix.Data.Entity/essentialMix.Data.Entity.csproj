@@ -11,9 +11,9 @@
 		<AssemblyOriginatorKeyFile>..\sign.pfx</AssemblyOriginatorKeyFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Platforms>AnyCPU;x64;x86</Platforms>
-		<AssemblyVersion>13.0.16.0</AssemblyVersion>
-		<FileVersion>22.7.13.0</FileVersion>
-		<Version>13.0.16.0</Version>
+		<AssemblyVersion>13.0.17.0</AssemblyVersion>
+		<FileVersion>22.8.16.0</FileVersion>
+		<Version>13.0.17.0</Version>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
@@ -53,7 +53,7 @@
 		<PackageId>$(ProjectName)</PackageId>
 		<PackageIcon>buckramega.png</PackageIcon>
 		<PackageOutputPath>$(SolutionDir)nuget</PackageOutputPath>
-		<PackageVersion>13.0.16.0</PackageVersion>
+		<PackageVersion>13.0.17.0</PackageVersion>
 		<Authors>asm</Authors>
 		<Description>Common extensions methods, helper classes, components, nano systems, and common patterns</Description>
 		<PackageTags>utilities, tools, extensions, helpers, components, patterns</PackageTags>
@@ -77,9 +77,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
-		<PackageReference Include="essentialMix" Version="13.0.16" />
-		<PackageReference Include="essentialMix.Data" Version="13.0.16" />
-		<PackageReference Include="essentialMix.Threading" Version="13.0.16" />
+		<PackageReference Include="essentialMix" Version="13.0.17" />
+		<PackageReference Include="essentialMix.Data" Version="13.0.17" />
+		<PackageReference Include="essentialMix.Threading" Version="13.0.17" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
