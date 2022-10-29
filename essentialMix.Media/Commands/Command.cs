@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using essentialMix.Extensions;
 using essentialMix.Helpers;
-using essentialMix.Threading;
+using essentialMix.Windows.Threading;
 using JetBrains.Annotations;
 
 namespace essentialMix.Media.Commands;
@@ -76,7 +76,7 @@ public class Command : Runnable
 
 		string exePath = __workingDir + command.ExecutableName;
 		if (!File.Exists(exePath)) throw new FileNotFoundException("Dependency not found.", exePath);
-			
+
 		foreach (string dependency in command.Dependencies.SkipNullOrEmptyTrim())
 		{
 			if (File.Exists(__workingDir + dependency)) continue;

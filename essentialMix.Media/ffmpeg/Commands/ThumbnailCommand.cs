@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using essentialMix.Collections;
 using essentialMix.Drawing;
-using essentialMix.Drawing.Helpers;
 using essentialMix.Extensions;
 using essentialMix.Helpers;
 
@@ -108,7 +107,7 @@ public sealed class ThumbnailCommand : InputOutputCommand
 			{
 				Color backColor = bmp.GetPixel(bmp.Width - 1, bmp.Height - 1);
 				width = bmp.Width;
-				newBmp = BitmapHelper.CropBackground(bmp, backColor, DimensionRestriction.KeepHeight, VideoThumbWidth);
+				newBmp = Windows.Helpers.BitmapHelper.CropBackground(bmp, backColor, DimensionRestriction.KeepHeight, VideoThumbWidth);
 			}
 			else
 			{
