@@ -202,6 +202,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey> : RepositoryBase<T
 	}
 
 	/// <inheritdoc />
+	[NotNull]
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey key)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -418,6 +419,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2> : essentia
 		return query;
 	}
 
+	[NotNull]
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -645,6 +647,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3> : e
 	}
 
 	/// <inheritdoc />
+	[NotNull]
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -884,6 +887,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 	}
 
 	/// <inheritdoc />
+	[NotNull]
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4)
 	{
 		IQueryable<TEntity> query = DbSet;
@@ -1134,6 +1138,7 @@ public abstract class RepositoryBase<TContext, TEntity, TKey1, TKey2, TKey3, TKe
 	}
 
 	/// <inheritdoc />
+	[NotNull]
 	protected override IQueryable<TEntity> PrepareGetQuery(TKey1 key1, TKey2 key2, TKey3 key3, TKey4 key4, TKey5 key5)
 	{
 		IQueryable<TEntity> query = DbSet;
