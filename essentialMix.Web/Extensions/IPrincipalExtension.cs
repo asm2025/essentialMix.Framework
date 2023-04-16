@@ -15,13 +15,15 @@ public static class IPrincipalExtension
 	{
 		if (thisValue.Identity is not ClaimsIdentity identity) return;
 
-		HttpContext ctx = HttpContext.Current ?? throw new InvalidOperationException("No HTTP context is currently running.");
+		HttpContext ctx = HttpContext.Current;
+		if (ctx == null) return;
+
 		IAuthenticationManager authenticationManager = ctx.GetOwinContext()?.Authentication ?? throw new InvalidOperationException("Could not get an Owin context's authentication manager.");
 
 		// check for existing claim and remove it
 		Claim existingClaim = identity.FindFirst(key);
 		if (existingClaim != null) identity.RemoveClaim(existingClaim);
-			
+
 		// add new claim
 		identity.AddClaim(new Claim(key, value ?? string.Empty));
 		authenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = true });
