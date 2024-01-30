@@ -1,5 +1,5 @@
+Import-Module PKI
 Set-Variable storeLocation -Option Constant -Value "cert:\LocalMachine\My"
-Set-Variable provider -Option Constant -Value "Microsoft Enhanced RSA and AES Cryptographic Provider"
 Set-Variable domain -Option Constant -Value "localhost"
 Set-Variable ipv4 -Option Constant -Value "127.0.0.1"
 Set-Variable ipv6 -Option Constant -Value "::1"

@@ -7,12 +7,12 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<LangVersion>11.0</LangVersion>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<SignAssembly>true</SignAssembly>
+		<SignAssembly>false</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\sign.pfx</AssemblyOriginatorKeyFile>
 		<Platforms>AnyCPU;x64;x86</Platforms>
-		<AssemblyVersion>15.0.0.0</AssemblyVersion>
+		<AssemblyVersion>14.0.11.0</AssemblyVersion>
 		<FileVersion>23.11.16</FileVersion>
-		<Version>15.0.0.0</Version>
+		<Version>14.0.11.0</Version>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
@@ -52,7 +52,7 @@
 		<PackageId>$(ProjectName)</PackageId>
 		<PackageIcon>buckramega.png</PackageIcon>
 		<PackageOutputPath>$(SolutionDir)nuget</PackageOutputPath>
-		<PackageVersion>15.0.0.0</PackageVersion>
+		<PackageVersion>14.0.11.0</PackageVersion>
 		<Authors>asm</Authors>
 		<Description>Common extensions methods, helper classes, components, nano systems, and common patterns</Description>
 		<PackageTags>utilities, tools, extensions, helpers, components, patterns, database, dbms, orm, xml, serialization</PackageTags>
@@ -75,12 +75,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="essentialMix" Version="14.0.10" />
-		<PackageReference Include="essentialMix.Collections" Version="14.0.10" />
-		<PackageReference Include="essentialMix.Drawing" Version="14.0.10" />
-		<PackageReference Include="essentialMix.Threading" Version="14.0.10" />
-		<PackageReference Include="essentialMix.Windows" Version="14.0.10" />
-		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+		<PackageReference Include="essentialMix" Version="14.0.11" />
+		<PackageReference Include="essentialMix.Collections" Version="14.0.11" />
+		<PackageReference Include="essentialMix.Drawing" Version="14.0.11" />
+		<PackageReference Include="essentialMix.Threading" Version="14.0.11" />
+		<PackageReference Include="essentialMix.Windows" Version="14.0.11" />
+		<PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
