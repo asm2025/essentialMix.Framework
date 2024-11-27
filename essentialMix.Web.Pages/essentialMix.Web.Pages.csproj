@@ -6,7 +6,6 @@
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<LangVersion>11.0</LangVersion>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<SignAssembly>false</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\sign.pfx</AssemblyOriginatorKeyFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
